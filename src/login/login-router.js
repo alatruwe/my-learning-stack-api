@@ -43,4 +43,13 @@ loginRouter.post("/", jsonBodyParser, (req, res, next) => {
     .catch(next);
 });
 
+// refresh auth token
+loginRouter.post("/refresh", requireAuth, (req, res) => {
+  const sub = req.user.email;
+  const payload = { user_id: req.user.id };
+  res.send({
+    authToken: LoginService.createJwt(sub, payload),
+  });
+});
+
 module.exports = loginRouter;
