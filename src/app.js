@@ -8,6 +8,7 @@ const loginRouter = require("./login/login-router");
 const signupRouter = require("./signup/signup-router");
 const dashboardRouter = require("./dashboard/dashboard-router");
 const profileRouter = require("./profile/profile-router");
+const newEntryRouter = require("./new-entry/new-entry-router");
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use("/api/login", loginRouter);
 app.use("/api/signup", signupRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/dashboard", dashboardRouter);
+app.use("/api/new-entry", newEntryRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello, world!");
