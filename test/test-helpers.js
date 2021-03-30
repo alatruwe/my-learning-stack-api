@@ -41,6 +41,87 @@ function makeUsersArray() {
   ];
 }
 
+function makeEntriesArray() {
+  return [
+    {
+      id: 1,
+      user_id: 1,
+      date: "2029-01-22T16:28:32.615Z",
+      current_mood: "smile",
+      tech_id: 1,
+      learning_notes: "bla bla bla",
+      struggling_notes: "ble ble ble",
+    },
+    {
+      id: 2,
+      user_id: 1,
+      date: "2029-01-22T16:28:32.615Z",
+      current_mood: "smile",
+      tech_id: 1,
+      learning_notes: "bla bla bla",
+      struggling_notes: "ble ble ble",
+    },
+    {
+      id: 3,
+      user_id: 1,
+      date: "2029-01-22T16:28:32.615Z",
+      current_mood: "smile",
+      tech_id: 1,
+      learning_notes: "bla bla bla",
+      struggling_notes: "ble ble ble",
+    },
+    {
+      id: 4,
+      user_id: 1,
+      date: "2029-01-22T16:28:32.615Z",
+      current_mood: "smile",
+      tech_id: 1,
+      learning_notes: "bla bla bla",
+      struggling_notes: "ble ble ble",
+    },
+  ];
+}
+
+function makeProfilesArray() {
+  return [
+    {
+      id: 1,
+      tech_id: 1,
+      user_id: 1,
+    },
+    {
+      id: 2,
+      tech_id: 1,
+      user_id: 1,
+    },
+    {
+      id: 3,
+      tech_id: 1,
+      user_id: 1,
+    },
+  ];
+}
+
+function makeTechListArray() {
+  return [
+    {
+      id: 1,
+      name: "react",
+      icon: "",
+    },
+    {
+      id: 2,
+      name: "javascript",
+      icon: "",
+    },
+    {
+      id: 3,
+      name: "node.js",
+      icon: "",
+    },
+  ];
+}
+
 function seedUsers(db, users) {
   const preppedUsers = users.map((user) => ({
     ...user,
@@ -55,10 +136,49 @@ function seedUsers(db, users) {
     );
 }
 
+function seedTechList(db, techlist) {
+  return db.insert(techlist).into("tech_list").returning("*");
+}
+
+function seedProfiles(db, profiles) {
+  return db.insert(profiles).into("profiles").returning("*");
+}
+
+function seedEntriesTables(db, users, profiles = [], entries, techlist = []) {
+  // use a transaction to group the queries and auto rollback on any failure
+  return db.transaction(async (trx) => {
+    await seedUsers(trx, users);
+    await seedTechList(trx, techlist);
+    await seedProfiles(trx, profiles);
+    await trx.into("entries").insert(entries);
+    // update the auto sequence to match the forced id values
+    await trx.raw(`SELECT setval('entries_id_seq', ?)`, [
+      entries[entries.length - 1].id,
+    ]);
+  });
+}
+
 function makeLibraryFixtures() {
   const testUsers = makeUsersArray();
+  const testEntries = makeEntriesArray();
+  const testProfiles = makeProfilesArray();
+  const testTechList = makeTechListArray();
+  return { testUsers, testEntries, testProfiles, testTechList };
+}
 
-  return { testUsers };
+function makeExpectedEntries(user, entries) {
+  const expectedEntries = entries.filter((entry) => {
+    return entry.user_id === user.id;
+  });
+  return expectedEntries.map((entry) => {
+    return {
+      tech_id: entry.tech_id,
+      date: entry.date,
+      current_mood: entry.current_mood,
+      learning_notes: entry.learning_notes,
+      struggling_notes: entry.struggling_notes,
+    };
+  });
 }
 
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
@@ -71,7 +191,12 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
 
 module.exports = {
   makeUsersArray,
+  makeEntriesArray,
+  makeTechListArray,
+  makeProfilesArray,
   makeLibraryFixtures,
   makeAuthHeader,
+  makeExpectedEntries,
   seedUsers,
+  seedEntriesTables,
 };
