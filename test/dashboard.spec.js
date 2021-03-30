@@ -2,7 +2,7 @@ const knex = require("knex");
 const app = require("../src/app");
 const helpers = require("./test-helpers");
 
-describe.only("Dashboard Endpoint", function () {
+describe("Dashboard Endpoint", function () {
   let db;
 
   const {
