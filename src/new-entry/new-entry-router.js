@@ -36,7 +36,6 @@ newEntryRouter
       .then((res) => {
         newEntry.tech_id = res[0].id;
 
-        console.log(newEntry);
         return NewEntryService.insertEntry(req.app.get("db"), newEntry);
       })
       .then((entry) => {
