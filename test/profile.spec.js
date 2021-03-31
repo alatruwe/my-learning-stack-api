@@ -29,6 +29,50 @@ describe("Profile Endpoint", function () {
     db.raw("TRUNCATE tech_list, users, profiles RESTART IDENTITY CASCADE")
   );
 
+  describe(`GET /api/profile`, () => {
+    //test when database is empty
+    context(`Given no profile`, () => {
+      beforeEach(() => {
+        return db
+          .into("users")
+          .insert(testUsers)
+          .then(() => {
+            return db.into("tech_list").insert(testTechList);
+          });
+      });
+      it(`responds with 200 and an empty list`, () => {
+        return supertest(app)
+          .get("/api/profile")
+          .set("Authorization", helpers.makeAuthHeader(testUsers[0]))
+          .expect(200, []);
+      });
+    });
+
+    // test when database has items
+    context("Given there are a profile in the database", () => {
+      beforeEach("insert new profiles", () => {
+        return db
+          .into("users")
+          .insert(testUsers)
+          .then(() => {
+            return db
+              .into("tech_list")
+              .insert(testTechList)
+              .then(() => {
+                return db.into("profiles").insert(testProfiles);
+              });
+          });
+      });
+
+      it("responds with 200 and the specified profile", () => {
+        return supertest(app)
+          .get(`/api/profile/`)
+          .set("Authorization", helpers.makeAuthHeader(testUsers[0]))
+          .expect(200);
+      });
+    });
+  });
+
   describe(`POST /api/profile`, () => {
     beforeEach(() => helpers.seedUsers(db, testUsers));
 

@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const { expect } = require("chai");
 const jwt = require("jsonwebtoken");
 
 function makeUsersArray() {
@@ -97,7 +98,7 @@ function makeProfilesArray() {
     {
       id: 3,
       tech_id: 1,
-      user_id: 1,
+      user_id: 2,
     },
   ];
 }
@@ -168,7 +169,7 @@ function makeLibraryFixtures() {
 
 function makeExpectedEntries(user, entries) {
   const expectedEntries = entries.filter((entry) => {
-    return entry.user_id === user.id;
+    return entry.user_id === user.id; // user.user_id
   });
   return expectedEntries.map((entry) => {
     return {
