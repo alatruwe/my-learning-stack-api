@@ -7,7 +7,8 @@ const DashboardService = {
         "current_mood",
         "tech_id",
         "learning_notes",
-        "struggling_notes"
+        "struggling_notes",
+        "id"
       )
       .where("user_id", user_id);
   },
