@@ -1,14 +1,15 @@
 const DashboardService = {
   getEntries(db, user_id) {
     return db
-      .from("entries")
+      .from("entries AS entries")
+      .join("tech_list", "entries.tech_id", "tech_list.id")
       .select(
-        "date",
-        "current_mood",
-        "tech_id",
-        "learning_notes",
-        "struggling_notes",
-        "id"
+        "entries.date",
+        "entries.current_mood",
+        "entries.tech_id",
+        "entries.learning_notes",
+        "entries.struggling_notes",
+        "tech_list.name"
       )
       .where("user_id", user_id);
   },
