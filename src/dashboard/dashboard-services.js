@@ -9,6 +9,7 @@ const DashboardService = {
         "entries.tech_id",
         "entries.learning_notes",
         "entries.struggling_notes",
+        "entries.id",
         "tech_list.name"
       )
       .where("user_id", user_id);
