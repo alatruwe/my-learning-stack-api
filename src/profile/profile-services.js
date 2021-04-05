@@ -20,7 +20,7 @@ const ProfileService = {
       .where("profiles.user_id", user_id)
       .from("profiles")
       .join("tech_list", "profiles.tech_id", "tech_list.id")
-      .select("tech_list.name");
+      .select("tech_list.name", "tech_list.id");
   },
 };
 
