@@ -60,19 +60,26 @@ profileRouter
       .then(() => {
         for (const [key, value] of Object.entries(techs)) {
           TechService.getTechId(req.app.get("db"), value).then((res) => {
-            // insert profile
+            // create profile
             const data = { tech_id: res.id, user_id: user_id };
 
-            ProfileService.insertProfile(req.app.get("db"), data);
+            // check if profile already exist
+            ProfileService.findProfile(req.app.get("db"), data).then((res) => {
+              if (!res)
+                // if no profile, insert the new one
+                ProfileService.insertProfile(req.app.get("db"), data).catch(
+                  next
+                );
+            });
           });
         }
       })
       .then(() => {
-        ProfileService.getUserprofile(req.app.get("db"), req.user.id).then(
-          (profile) => {
+        ProfileService.getUserprofile(req.app.get("db"), req.user.id)
+          .then((profile) => {
             res.status(201).json(profile);
-          }
-        );
+          })
+          .catch(next);
       });
   });
 

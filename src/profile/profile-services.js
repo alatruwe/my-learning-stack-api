@@ -7,6 +7,14 @@ const ProfileService = {
       .then(([profile]) => profile);
   },
 
+  findProfile(db, profile) {
+    return db
+      .where({ user_id: profile.user_id, tech_id: profile.tech_id })
+      .from("profiles")
+      .returning("*")
+      .then(([profile]) => profile);
+  },
+
   getUserprofile(db, user_id) {
     return db
       .where("profiles.user_id", user_id)
