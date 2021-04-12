@@ -55,7 +55,7 @@ Content-Type: application/json
 
 **You send:** Your login credentials.
 
-**You get:** An `authToken` with wich you can make further actions.
+**You get:** An `authToken` with which you can make further actions.
 
 - authToken => string
 
