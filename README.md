@@ -237,7 +237,7 @@ Content-Type: application/json
 ```
 ## Add a new entry
 
-**You send:** Your authToken.
+**You send:** Your entry details.
 
 **You get:** The entry profile created with:
 
@@ -255,6 +255,14 @@ Content-Type: application/json
 POST /api/new-entry HTTP/1.1
 Authorization: bearer "your authToken"
 Content-Type: application/json
+
+{
+    "current_mood": "smile",
+    "tech_id": "javascript",
+    "learning_notes": "user notes here",
+    "struggling_notes": "user notes here"
+  }
+  
 ```
 
 **Successful Response:**
