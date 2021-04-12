@@ -167,17 +167,21 @@ function makeLibraryFixtures() {
   return { testUsers, testEntries, testProfiles, testTechList };
 }
 
-function makeExpectedEntries(user, entries) {
+function makeExpectedEntries(user, entries, tech_list) {
   const expectedEntries = entries.filter((entry) => {
     return entry.user_id === user.id; // user.user_id
   });
+
   return expectedEntries.map((entry) => {
+    const techName = tech_list.find((tech) => entry.tech_id === tech.id);
     return {
       tech_id: entry.tech_id,
       date: entry.date,
       current_mood: entry.current_mood,
       learning_notes: entry.learning_notes,
       struggling_notes: entry.struggling_notes,
+      id: entry.id,
+      name: techName.name,
     };
   });
 }
