@@ -12,7 +12,8 @@ const DashboardService = {
         "entries.id",
         "tech_list.name"
       )
-      .where("user_id", user_id);
+      .where("user_id", user_id)
+      .orderBy("entries.date", "desc");
   },
 
   getEntryById(db, entry_id) {
